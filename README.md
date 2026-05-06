@@ -1,68 +1,40 @@
 # vertex-trace-alert-loom
 
-`vertex-trace-alert-loom` packages a practical observability exercise in Scala. The emphasis is on deterministic behavior, a small public API, and examples that explain the tradeoffs.
+`vertex-trace-alert-loom` explores observability with a small Scala codebase and local fixtures. The technical goal is to package a Scala local lab for alert analysis with append-only fixtures, checkpoint recovery checks, and documented operating limits.
 
-## How I Read Vertex Trace Alert Loom
+## Why This Exists
 
-The useful thing to inspect here is how the same score rule is represented in code, metadata, and examples. If those three pieces disagree, the audit script should make the drift visible.
+This is intentionally local and self-contained so it can be inspected without credentials, services, or seeded history.
 
-## Problem Shape
+## Vertex Trace Alert Loom Review Notes
 
-The goal is to capture the core behavior in code and make the surrounding assumptions obvious. A reader should be able to run the verifier, open the fixtures, and understand why each decision was made.
+For a quick review, compare `incident shape` with `span volume` before reading the middle cases.
 
-## Internal Model
+## Capabilities
 
-The design is intentionally direct: parse or construct a signal, score it, classify it, and verify the expected branch. This makes the repository useful for studying observability behavior without needing a service or database unless the language project itself is SQL. The Scala code uses case classes and a compact object API to keep the test path direct.
+- `fixtures/domain_review.csv` adds cases for span volume and latency skew.
+- `metadata/domain-review.json` records the same cases in structured form.
+- `config/review-profile.json` captures the read order and the two review questions.
+- `examples/vertex-trace-alert-walkthrough.md` walks through the case spread.
+- The Scala code includes a review path for `incident shape` and `span volume`.
+- `docs/field-notes.md` explains the strongest and weakest cases.
 
-## Scenario Walkthrough
+## Implementation Shape
 
-`pressure` is the first example I would inspect because it lands on the `review` path with a score of 115. The broader file also keeps `degraded` at 12 and `surge` at 222, which gives the model a useful low-to-high spread.
+The implementation keeps the scoring rule plain: reward signal and confidence, preserve slack, penalize drag, then classify the result into a review lane.
 
-## Main Behaviors
+The added Scala path is deliberately direct, with fixtures doing most of the explaining.
 
-- Uses fixture data to keep log shape changes visible in code review.
-- Includes extended examples for latency summaries, including `surge` and `degraded`.
-- Documents incident slices tradeoffs in `docs/operations.md`.
-- Runs locally with a single verification command and no external credentials.
-- Stores project constants and verification metadata in `metadata/project.json`.
-
-## Run It Locally
-
-Use a normal shell with Scala available on `PATH`. The verifier is written as a PowerShell script because the portfolio was assembled on Windows.
-
-## Validation
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/audit.ps1
-```
-
-The audit command checks repository structure and README constraints before it delegates to the verifier.
-
-## Repository Map
-
-- `src`: primary implementation
-- `tests`: verification harness
-- `fixtures`: compact golden scenarios
-- `examples`: expanded scenario set
-- `metadata`: project constants and verification metadata
-- `docs`: operations and extension notes
-- `scripts`: local verification and audit commands
-
-## Known Edges
-
-The fixture set is deliberately small. That keeps the review surface clear, but it also means the model should not be treated as a complete domain simulator.
-
-## Follow-Up Work
-
-- Add a short report command that prints the score breakdown for a single scenario.
-- Add malformed input fixtures so the failure path is as visible as the happy path.
-- Split the scoring constants into a typed configuration object and validate it before use.
-- Add one more observability fixture that focuses on a malformed or borderline input.
-
-## How To Run It
+## Local Usage
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify.ps1
 ```
 
-This runs the language-level build or test path against the compact fixture set.
+## Verification
+
+The check exercises the source code and the review fixture. `recovery` is the high score at 228; `baseline` is the low score at 164.
+
+## Roadmap
+
+The fixture set is small enough to audit by hand. The next useful expansion is malformed input coverage, not extra surface area.

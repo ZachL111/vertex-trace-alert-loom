@@ -1,0 +1,6 @@
+name,focus,signal,slack,drag,confidence,score,lane
+baseline,span volume,77,31,28,63,164,ship
+stress,latency skew,73,49,19,87,225,ship
+edge,signal loss,65,32,18,80,188,ship
+recovery,incident shape,82,40,18,78,228,ship
+stale,span volume,71,49,27,65,175,ship

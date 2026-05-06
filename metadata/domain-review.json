@@ -1,0 +1,73 @@
+{
+  "repo": "vertex-trace-alert-loom",
+  "language": "Scala",
+  "category": "Observability",
+  "goal": "Package a Scala local lab for alert analysis with append-only fixtures, checkpoint recovery checks, and documented operating limits.",
+  "review_model": {
+    "terms": [
+      "span volume",
+      "latency skew",
+      "signal loss",
+      "incident shape"
+    ],
+    "lanes": [
+      "ship",
+      "watch",
+      "hold"
+    ],
+    "score": "signal * 2 + slack + confidence - drag * 3",
+    "purpose": "surface the domain-specific cases that need the most careful review"
+  },
+  "cases": [
+    {
+      "name": "baseline",
+      "focus": "span volume",
+      "signal": 77,
+      "slack": 31,
+      "drag": 28,
+      "confidence": 63,
+      "score": 164,
+      "lane": "ship"
+    },
+    {
+      "name": "stress",
+      "focus": "latency skew",
+      "signal": 73,
+      "slack": 49,
+      "drag": 19,
+      "confidence": 87,
+      "score": 225,
+      "lane": "ship"
+    },
+    {
+      "name": "edge",
+      "focus": "signal loss",
+      "signal": 65,
+      "slack": 32,
+      "drag": 18,
+      "confidence": 80,
+      "score": 188,
+      "lane": "ship"
+    },
+    {
+      "name": "recovery",
+      "focus": "incident shape",
+      "signal": 82,
+      "slack": 40,
+      "drag": 18,
+      "confidence": 78,
+      "score": 228,
+      "lane": "ship"
+    },
+    {
+      "name": "stale",
+      "focus": "span volume",
+      "signal": 71,
+      "slack": 49,
+      "drag": 27,
+      "confidence": 65,
+      "score": 175,
+      "lane": "ship"
+    }
+  ]
+}
