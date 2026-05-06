@@ -1,0 +1,17 @@
+{
+  "repo": "vertex-trace-alert-loom",
+  "thresholds": {
+    "signal": 4,
+    "slack": 2,
+    "confidence": 1,
+    "drag": 4,
+    "ship": 186,
+    "watch": 109
+  },
+  "terms": [
+    "span volume",
+    "latency skew",
+    "signal loss",
+    "incident shape"
+  ]
+}
